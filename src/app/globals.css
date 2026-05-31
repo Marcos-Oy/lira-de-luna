@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* shadcn token mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-montserrat);
+  --font-heading: var(--font-cormorant);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* Brand palette — single-level var refs so admin can override --brand-* at runtime */
+  --color-brand-beige-extra: var(--brand-beige-extra);
+  --color-brand-beige: var(--brand-beige);
+  --color-brand-beige-light: var(--brand-beige-light);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-sand: var(--brand-sand);
+  --color-brand-taupe: var(--brand-taupe);
+  --color-brand-dark: var(--brand-dark);
+}
+
+:root {
+  /* Overridable brand palette — admin injects overrides for these in <head> */
+  --brand-beige-extra: #E6D6C8;
+  --brand-beige: #D8BFAE;
+  --brand-beige-light: #EDE2D8;
+  --brand-cream: #F7F4F1;
+  --brand-sand: #CDA78F;
+  --brand-taupe: #8E7A6B;
+  --brand-dark: #5C4A3E;
+
+  /* shadcn tokens — literal hex, no variable chains */
+  --background: #F7F4F1;
+  --foreground: #5C4A3E;
+  --card: #F7F4F1;
+  --card-foreground: #5C4A3E;
+  --popover: #F7F4F1;
+  --popover-foreground: #5C4A3E;
+  --primary: #CDA78F;
+  --primary-foreground: #F7F4F1;
+  --secondary: #EDE2D8;
+  --secondary-foreground: #8E7A6B;
+  --muted: #EDE2D8;
+  --muted-foreground: #8E7A6B;
+  --accent: #D8BFAE;
+  --accent-foreground: #5C4A3E;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #D8BFAE;
+  --input: #EDE2D8;
+  --ring: #CDA78F;
+  --radius: 0.25rem;
+  --sidebar: #F7F4F1;
+  --sidebar-foreground: #5C4A3E;
+  --sidebar-primary: #CDA78F;
+  --sidebar-primary-foreground: #F7F4F1;
+  --sidebar-accent: #EDE2D8;
+  --sidebar-accent-foreground: #5C4A3E;
+  --sidebar-border: #D8BFAE;
+  --sidebar-ring: #CDA78F;
+}
+
+/* Keep dark mode in sync — brand is always light */
+.dark {
+  --background: #F7F4F1;
+  --foreground: #5C4A3E;
+  --card: #F7F4F1;
+  --card-foreground: #5C4A3E;
+  --popover: #F7F4F1;
+  --popover-foreground: #5C4A3E;
+  --primary: #CDA78F;
+  --primary-foreground: #F7F4F1;
+  --secondary: #EDE2D8;
+  --secondary-foreground: #8E7A6B;
+  --muted: #EDE2D8;
+  --muted-foreground: #8E7A6B;
+  --accent: #D8BFAE;
+  --accent-foreground: #5C4A3E;
+  --border: #D8BFAE;
+  --input: #EDE2D8;
+  --ring: #CDA78F;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cormorant);
+  }
+}
+
+/* ── Tiptap editor ──────────────────────────────────────────── */
+.tiptap-editor .ProseMirror {
+  outline: none;
+}
+.tiptap-editor .ProseMirror p { margin: 0 0 0.5em; }
+.tiptap-editor .ProseMirror p:last-child { margin-bottom: 0; }
+.tiptap-editor .ProseMirror ul { list-style: disc; padding-left: 1.4em; margin: 0.4em 0; }
+.tiptap-editor .ProseMirror ol { list-style: decimal; padding-left: 1.4em; margin: 0.4em 0; }
+.tiptap-editor .ProseMirror li { margin: 0.15em 0; }
+.tiptap-editor .ProseMirror strong { font-weight: 600; }
+.tiptap-editor .ProseMirror em { font-style: italic; }
+.tiptap-editor .ProseMirror u { text-decoration: underline; }
+.tiptap-editor .ProseMirror a { color: #CDA78F; text-decoration: underline; }
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #B8A89A;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Event description HTML output (landing page) ──────────── */
+.event-prose p { margin: 0 0 0.75em; }
+.event-prose p:last-child { margin-bottom: 0; }
+.event-prose ul { list-style: disc; padding-left: 1.5em; margin: 0.5em 0; }
+.event-prose ol { list-style: decimal; padding-left: 1.5em; margin: 0.5em 0; }
+.event-prose li { margin: 0.25em 0; }
+.event-prose strong { font-weight: 600; }
+.event-prose em { font-style: italic; }
+.event-prose u { text-decoration: underline; }
+.event-prose a { color: inherit; text-decoration: underline; }
