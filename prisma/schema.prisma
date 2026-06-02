@@ -127,6 +127,10 @@ model AuditLog {
   details     Json?
   ipAddress   String?
   createdAt   DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+  @@index([resource])
 }
 
 // ============================================================
@@ -220,6 +224,8 @@ model WholesaleTier {
   minQuantity  Int
   pricePerUnit Int
   sortOrder    Int     @default(0)
+
+  @@unique([productId, minQuantity])
 }
 
 model WeightProduct {
@@ -285,6 +291,8 @@ model CartItem {
   quantity    Int
   weightGrams Float?
   addedAt     DateTime        @default(now())
+
+  @@index([cartId, productId, variantId])
 }
 
 // ============================================================
@@ -357,6 +365,11 @@ model Order {
   updatedAt DateTime @updatedAt
 
   returns Return[]
+
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@index([guestEmail])
 }
 
 model OrderItem {
@@ -514,6 +527,8 @@ model NewsletterSubscriber {
   isActive     Boolean  @default(true)
   source       String   @default("store")
   subscribedAt DateTime @default(now())
+
+  @@index([isActive])
 }
 
 // ============================================================
@@ -682,6 +697,10 @@ model EmailLog {
   orderId String?
   status  String    @default("sent")
   sentAt  DateTime  @default(now())
+
+  @@index([orderId])
+  @@index([type])
+  @@index([sentAt])
 }
 
 enum EmailType {
@@ -753,6 +772,10 @@ model Lead {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([stage])
+  @@index([createdAt])
 }
 
 model LeadActivity {
@@ -941,4 +964,5 @@ model SecurityLog {
   @@index([ip])
   @@index([email])
   @@index([createdAt])
+  @@index([severity, createdAt])
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTransition, useState } from "react";
 import {
@@ -246,8 +247,8 @@ export default function SeguridadClient({ logs, total, page, totalPages, kpis, f
                   const isExpanded = expandedId === log.id;
 
                   return (
-                    <>
-                      <tr key={log.id}
+                    <React.Fragment key={log.id}>
+                      <tr
                         className={`border-b border-[#EDE2D8] hover:bg-[#F7F4F1] transition-colors cursor-pointer ${
                           log.severity === "CRITICAL" ? "bg-red-50/50" :
                           log.severity === "ERROR"    ? "bg-orange-50/30" : ""
@@ -299,7 +300,7 @@ export default function SeguridadClient({ logs, total, page, totalPages, kpis, f
                           </td>
                         </tr>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </tbody>

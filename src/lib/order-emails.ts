@@ -249,40 +249,22 @@ export async function notifyAdminLowStock(
 export async function decrementStockForOrder(orderId: string) {
   const items = await OrderModel.findItemsById(orderId);
 
-  const lowStockAlerts: {
-    productId:    string;
-    variantId:    string | null;
-    productName:  string;
-    variantLabel: string | null;
-    newStock:     number;
-  }[] = [];
-
-  for (const item of items) {
-    if (item.variantId) {
-      const updated = await OrderModel.decrementVariantStock(item.variantId, item.quantity).catch(() => null);
-      if (updated && updated.stock <= LOW_STOCK_THRESHOLD) {
-        lowStockAlerts.push({
-          productId:    item.productId,
-          variantId:    item.variantId,
-          productName:  item.productName,
-          variantLabel: item.variantLabel,
-          newStock:     Math.max(0, updated.stock),
-        });
+  const results = await Promise.all(
+    items.map(async (item) => {
+      if (item.variantId) {
+        const updated = await OrderModel.decrementVariantStock(item.variantId, item.quantity).catch(() => null);
+        return updated && updated.stock <= LOW_STOCK_THRESHOLD
+          ? { productId: item.productId, variantId: item.variantId, productName: item.productName, variantLabel: item.variantLabel, newStock: Math.max(0, updated.stock) }
+          : null;
       }
-    } else {
       const updated = await OrderModel.decrementProductStock(item.productId, item.quantity).catch(() => null);
-      if (updated && updated.stock <= LOW_STOCK_THRESHOLD) {
-        lowStockAlerts.push({
-          productId:    item.productId,
-          variantId:    null,
-          productName:  item.productName,
-          variantLabel: item.variantLabel,
-          newStock:     Math.max(0, updated.stock),
-        });
-      }
-    }
-  }
+      return updated && updated.stock <= LOW_STOCK_THRESHOLD
+        ? { productId: item.productId, variantId: null, productName: item.productName, variantLabel: item.variantLabel, newStock: Math.max(0, updated.stock) }
+        : null;
+    }),
+  );
 
+  const lowStockAlerts = results.filter((r): r is NonNullable<typeof r> => r !== null);
   if (lowStockAlerts.length > 0) {
     notifyAdminLowStock(lowStockAlerts).catch(() => {});
   }

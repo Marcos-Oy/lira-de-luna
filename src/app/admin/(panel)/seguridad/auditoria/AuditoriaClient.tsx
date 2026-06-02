@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTransition, useState } from "react";
 import { ClipboardList, ChevronLeft, ChevronRight, Search, X, Filter } from "lucide-react";
@@ -156,9 +157,9 @@ export default function AuditoriaClient({ logs, total, page, totalPages, todayCo
             <table className="w-full text-[11px]">
               <thead>
                 <tr className="bg-[#F7F4F1] border-b border-[#D8BFAE]">
-                  {["Fecha/Hora", "Admin", "Acción", "Recurso", "ID Recurso", "IP", ""].map((h) => (
+                  {["Fecha/Hora", "Admin", "Acción", "Recurso", "ID Recurso", "IP", "Detalle"].map((h) => (
                     <th key={h} className="px-3 py-2.5 text-left text-[9px] tracking-[0.12em] uppercase text-[#8E7A6B] font-medium whitespace-nowrap">
-                      {h}
+                      {h !== "Detalle" ? h : ""}
                     </th>
                   ))}
                 </tr>
@@ -169,8 +170,8 @@ export default function AuditoriaClient({ logs, total, page, totalPages, todayCo
                     ?? "bg-[#EDE2D8] text-[#8E7A6B]";
                   const isExpanded = expandedId === log.id;
                   return (
-                    <>
-                      <tr key={log.id}
+                    <React.Fragment key={log.id}>
+                      <tr
                         className="border-b border-[#EDE2D8] hover:bg-[#F7F4F1] transition-colors cursor-pointer"
                         onClick={() => setExpandedId(isExpanded ? null : log.id)}
                       >
@@ -207,7 +208,7 @@ export default function AuditoriaClient({ logs, total, page, totalPages, todayCo
                           </td>
                         </tr>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </tbody>

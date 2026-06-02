@@ -16,19 +16,21 @@ async function upsertCartItem(
   variantId?: string,
   weightGrams?: number
 ) {
-  const existing = await prisma.cartItem.findFirst({
-    where: { cartId, productId, variantId: variantId ?? null },
-  });
-
-  if (existing) {
-    return prisma.cartItem.update({
-      where: { id: existing.id },
-      data: { quantity: existing.quantity + quantity, ...(weightGrams !== undefined && { weightGrams }) },
+  return prisma.$transaction(async (tx) => {
+    const existing = await tx.cartItem.findFirst({
+      where: { cartId, productId, variantId: variantId ?? null },
     });
-  }
 
-  return prisma.cartItem.create({
-    data: { cartId, productId, quantity, variantId: variantId ?? null, weightGrams: weightGrams ?? null },
+    if (existing) {
+      return tx.cartItem.update({
+        where: { id: existing.id },
+        data: { quantity: existing.quantity + quantity, ...(weightGrams !== undefined && { weightGrams }) },
+      });
+    }
+
+    return tx.cartItem.create({
+      data: { cartId, productId, quantity, variantId: variantId ?? null, weightGrams: weightGrams ?? null },
+    });
   });
 }
 
