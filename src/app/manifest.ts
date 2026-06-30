@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const s = await prisma.storeSettings.findUnique({ where: { id: "singleton" } });
   const name = s?.storeName ?? "Lira de Luna";
