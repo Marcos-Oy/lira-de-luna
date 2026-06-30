@@ -46,3 +46,6 @@ playwright-results.txt
 
 # claude code local settings
 .claude/settings.local.json
+*.db
+*.db-shm
+*.db-wal
