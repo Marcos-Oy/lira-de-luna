@@ -1,5 +1,5 @@
 // ============================================================
-// LIRA DE LUNA — Prisma Schema v3 (MySQL)
+// LIRA DE LUNA — Prisma Schema v3 (PostgreSQL / Supabase)
 // ============================================================
 
 generator client {
@@ -7,8 +7,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ============================================================
@@ -94,7 +95,7 @@ model AdminUser {
   passwordHash   String
   whatsappNumber String?
   role           AdminRole @default(VIEWER)
-  permissions    Json      // string[] — MySQL no soporta arrays nativos
+  permissions    Json      // string[]
   isActive       Boolean   @default(true)
   lastLoginAt    DateTime?
   createdAt      DateTime  @default(now())
@@ -676,7 +677,7 @@ model Campaign {
   id        String    @id @default(cuid())
   subject   String
   preheader String?
-  content   String    @db.LongText
+  content   String    @db.Text
   imageUrl  String?   @db.Text
   status    String    @default("draft")
   sentCount Int       @default(0)
